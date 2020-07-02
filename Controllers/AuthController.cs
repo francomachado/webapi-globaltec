@@ -1,14 +1,10 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Globaltec.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 using Globaltec.Services;
 using Globaltec.Repositories;
-using Globaltec.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Globaltec.Controllers
 {
@@ -25,6 +21,12 @@ namespace Globaltec.Controllers
         {
             var user = UserRepository.Get(model.Username, model.Password);
             if (user == null)
+                return NotFound(new { message = "Usuário não informado"});
+
+            if (user.Username != model.Username)
+                return NotFound(new { message = "Usuário ou senha inválidos"});
+
+            if (user.Password != model.Password)
                 return NotFound(new { message = "Usuário ou senha inválidos"});
 
             var token = TokenService.GenerateToken(user);
@@ -37,10 +39,10 @@ namespace Globaltec.Controllers
         }
 
         //Retorna para o usuário se ele está autenticado ou não
-        //Token expira com 2h
+        //Token expira com 1h
         [HttpGet]
         [Route("login")]
-        [Authorize]
+        [Authorize(Roles = "Jedi,Padawan")]
         public string Authenticated() => String.Format("Autenticado - Usuário: {0} ", User.Identity.Name);
 
     }

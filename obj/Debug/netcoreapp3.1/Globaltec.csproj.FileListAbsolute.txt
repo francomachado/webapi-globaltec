@@ -44,3 +44,8 @@
 /Users/francomachado/codigo/webapi-globaltec/obj/Debug/netcoreapp3.1/Globaltec.dll
 /Users/francomachado/codigo/webapi-globaltec/obj/Debug/netcoreapp3.1/Globaltec.pdb
 /Users/francomachado/codigo/webapi-globaltec/obj/Debug/netcoreapp3.1/Globaltec.genruntimeconfig.cache
+/Users/francomachado/codigo/webapi-globaltec/bin/Debug/netcoreapp3.1/Microsoft.OpenApi.dll
+/Users/francomachado/codigo/webapi-globaltec/bin/Debug/netcoreapp3.1/Swashbuckle.AspNetCore.Swagger.dll
+/Users/francomachado/codigo/webapi-globaltec/bin/Debug/netcoreapp3.1/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/francomachado/codigo/webapi-globaltec/bin/Debug/netcoreapp3.1/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/francomachado/codigo/webapi-globaltec/obj/Debug/netcoreapp3.1/Globaltec.MvcApplicationPartsAssemblyInfo.cs

@@ -1,17 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +26,12 @@ namespace Globaltec
             //Configurando e disponibilizando banco de dados em memoria
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
             services.AddScoped<DataContext, DataContext>();
+
+            //Documentacao com Swagger. Disponível em http://localhost/swagger
+            services.AddSwaggerGen(c =>
+            {
+            c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Globaltec API", Version = "v1" });
+            });
 
             //Serviço de autenticação utilizando Jwt Bearer (Json Web Token)
             services.AddCors();
@@ -58,6 +56,7 @@ namespace Globaltec
                     ValidateAudience = false
                 };
             });
+
         }
 
         
@@ -71,6 +70,13 @@ namespace Globaltec
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Globaltec WebAPI V1");
+            });
 
             //Permissões
             app.UseCors(x => x

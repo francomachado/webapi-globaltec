@@ -2,11 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Globaltec.Models;
-using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
-using Globaltec.Services;
-using Globaltec.Repositories;
 using Globaltec.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,16 +22,15 @@ namespace Globaltec.Controllers
         public async Task<ActionResult<Pessoa>> Post([FromServices] DataContext context,
                                                      [FromBody] Pessoa model)
         {
-            if (ModelState.IsValid)
-            {
-                context.Pessoas.Add(model);
-                await context.SaveChangesAsync();
-                return model;
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            context.Pessoas.Add(model);
+            await context.SaveChangesAsync();
+            return model;
+            
         }
 
         //Consulta geral pessoas
@@ -78,45 +74,45 @@ namespace Globaltec.Controllers
         //Exige atualizar todos os campos, com exceção do codigo
         [HttpPost]
         [Route("update/{codigo:int}")]
+        [Authorize(Roles = "Jedi,Padawan")]
         public async Task<ActionResult<Pessoa>> Update(
             [FromServices] DataContext context,
             [FromBody]Pessoa model,
             int codigo)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var cUpdate = context.Pessoas.First(a => a.Codigo == codigo);
+                return BadRequest(ModelState);
+            }
+
+            var cUpdate = context.Pessoas.First(a => a.Codigo == codigo);
                 cUpdate.Nome = model.Nome;
                 cUpdate.CPF = model.CPF;
                 cUpdate.UF = model.UF;
                 cUpdate.DataNascimento = model.DataNascimento;
                 await context.SaveChangesAsync();
                 return cUpdate;
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
+            
         }
 
         //Apaga registro pelo codigo
+        //Somente user Jedi pode apagar
         [HttpPost]
         [ProducesDefaultResponseType]
         [Route("delete/{codigo:int}")]
+        [Authorize(Roles = "Jedi")]
         public async Task<ActionResult<Pessoa>> Delete(
             [FromServices] DataContext context,
             int codigo)
         {
-            if (ModelState.IsValid)
-            {
-                context.Remove(context.Pessoas.First(a => a.Codigo == codigo));
-                await context.SaveChangesAsync();
-                return Ok("{'status':200, 'message': 'Registro apagado com sucesso'}");
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            
+            context.Remove(context.Pessoas.First(a => a.Codigo == codigo));
+            await context.SaveChangesAsync();
+            return Ok("{'status':200, 'message': 'Registro apagado com sucesso'}");
         }
     }
 }

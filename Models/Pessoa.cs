@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Globaltec.Models
@@ -8,7 +7,7 @@ namespace Globaltec.Models
     public class Pessoa
     {
         //Informações não serão persistidas no banco
-        //Deixei somente um id autoincremento em memória
+        //Código é uma chave com autoincremento
         [Key]
         public int Codigo {get; set;}
 

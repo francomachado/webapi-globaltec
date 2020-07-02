@@ -10,7 +10,6 @@ namespace Globaltec.Data
             : base(options)
             {
             } 
-
         public DbSet<Pessoa> Pessoas {get; set; }
     }
 }
